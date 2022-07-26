@@ -44,5 +44,5 @@ ___________________________________________________
 <h3>Sur le terminal :</h3>
 
     python -i .\candilib_bot.py
-    Bot()
+    >>> Bot()
 
