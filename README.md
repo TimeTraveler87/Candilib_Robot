@@ -25,7 +25,9 @@ ___________________________________________________
     
    Ligne 14 : Entrer le chemin absolue du fichier .exe pytesseract.
     
-   Ligne 20   Entrer chemin absolue du fichier .exe chromedriver.
+   Ligne 20 : Entrer chemin absolue du fichier .exe chromedriver.
+   
+   Ligne 28 : Après chaque tour infructueux, le programme s'interrompt pendant X à Y secondes
     
    <h3>config.py :</h3>
     
