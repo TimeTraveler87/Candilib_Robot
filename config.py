@@ -1,10 +1,10 @@
 from datetime import date
 from time import sleep
+#tts_ : temps de pause entre chaque actions sur l'application nécessitant un chargement de la page
+tts_accueil = 3
+tts_pageload = 1.5
+tts_notpageload = 0.5
 
-
-tts_accueil = 2
-tts_pageload = 0.75
-tts_notpageload = 0.2
 dict_month = {1:'//*[@id="tab-janvier"]/div/div/div/div/div', 2:'//*[@id="tab-février"]/div/div/div/div/div'
 , 3:'//*[@id="tab-mars"]/div/div/div/div/div', 4:'//*[@id="tab-avril"]/div/div/div/div/div', 5:'//*[@id="tab-mai"]/div/div/div/div/div'
 ,  6:'//*[@id="tab-juin"]/div/div/div/div/div', 7:'//*[@id="tab-juillet"]/div/div/div/div/div', 8:'//*[@id="tab-août"]/div/div/div/div/div'
@@ -14,17 +14,19 @@ l_month = list(dict_month.values())
 l_month_keys = list(dict_month.keys())
 month = int(date.today().month) #mois actuel du système
 l_month = l_month[month-1:month+3] #liste des xpath de tous les mois réservables
+div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div[3]/div', 94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div[4]/div'}
 
-log_link = ''#FILL WITH YOUR OWN LOG LINK
+log_link = 'https://beta.interieur.gouv.fr/candilib/candidat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjhkODdiMTE2NTk4MDAyOGEwZjUxZCIsImxldmVsIjowLCJjYW5kaWRhdFN0YXR1cyI6IjQiLCJub21OYWlzc2FuY2UiOiJGRVJSQVQiLCJjb2RlTmVwaCI6IjE4MDM3NzIwMTg2NiIsImhvbWVEZXBhcnRlbWVudCI6Ijc3IiwiZGVwYXJ0ZW1lbnQiOiI3NyIsImVtYWlsIjoiYWZlcnJhdDAxM0BnbWFpbC5jb20iLCJwb3J0YWJsZSI6IjA2Mzc2NjE5MTQiLCJwcmVub20iOiJBZ2hpbGVzIiwiZmlyc3RDb25uZWN0aW9uIjp0cnVlLCJkYXRlRVRHIjoiMjAyNy0wMy0wNCIsImlzSW5SZWNlbnRseURlcHQiOmZhbHNlLCJpYXQiOjE2NTg3NDMxMTYsImV4cCI6MTY1ODc5MzU5OH0.yreBj25ZEV-qBcsuwfLHYIptkbVTwXbSRlXjQernELg'
 dict_dep = {77:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[5]/div',
              78:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[6]/div', 
              91:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[7]/div', 
              92:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[8]/div', 
              93:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[9]/div', 
-             94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[10]/div'
-             }
+             94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[10]/div'}
 list_keys_dep =list(dict_dep.keys())
-#CI DESSOUS LISTE DES CHEMINS XPATH POUR LEUR CENTRE RESPECTIF
+
+# CI DESSOUS, GARDER LES DEPARTEMENTS DANS LE MEME ORDRE DEFINI PAR LA VARIABLE dict_dep
+
 matrix_dep_centre=[ #77
                     {'AVON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div/div',
                      'MELUN':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
@@ -51,7 +53,7 @@ matrix_dep_centre=[ #77
                     {'RUNGIS':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div/div',
                      'MAISONS ALFORT':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[4]/div/div'  
                     }
-
+                  ]
 list_dep_xpath = list(dict_dep.values())
 
 CAPTCHA_IMAGES = {
