@@ -1,4 +1,5 @@
 import base64
+from random import randint
 import cv2
 import io
 from pytesseract import pytesseract
@@ -6,35 +7,50 @@ from PIL import Image,ImageChops
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import urllib.request
-from config import log_link,list_keys_dep, matrix_dep_centre, l_month, tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
+from config import log_link,list_keys_dep, matrix_dep_centre, l_month, test_link, test_list_keys_dep, test_matrix_dep_centre,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
 from time import sleep, time
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-pytesseract.tesseract_cmd = r''#FILL WITH PASS OF PYTESSEREACT.EXE
-#Règle générale : return 1 = succès, return 0 = erreur ou echec
+pytesseract.tesseract_cmd = r''#Entrer chemin absolue du fichier .exe pytesseract
+from selenium.common.exceptions import NoSuchElementException
+#Règle générale : return 1 = succès, return 0 = Réponse captcha (faux) , return -1 = collision avec autre candidat, return False = aucune place trouvé , return -2 =Error NoSuchElementException
                             
 class Bot():
     def __init__(self):
-        self.driver = webdriver.Chrome(executable_path='')#FILL WITH PATH OF CHROMEDRIVER.EXE
-        self.login()
-        value = self.page_accueil_dpt()
-        while (value == False):
-            #sleep(60)
+        self.driver = webdriver.Chrome(executable_path='')#Entrer chemin absolue du fichier .exe chromedriver
+        sleep(tts_pageload)
+        value = False
+        i=0
+        while(value == False or value == -2):
             print("_____________________NOUVEAU TOUR_______________________")
-            self.page_accueil_dpt()
+            if(i>0 and value != -2):
+                print('')
+                sleep(randint(120,240))
+            elif(value == -2):
+                self.login()
+            value = self.main()
+            i+=1
         print("_______________________________________________________")
         print("PLACE RESERVEE AVEC SUCCES")
-        #self.driver.quit()
-
+        print(str(i) + " tour(s)")
+        self.driver.quit()
+   
+    def main(self):
+        value = self.page_accueil_dpt()
+        return value
+        
     def login(self):
         self.driver.get(log_link)
-        #self.driver.get(test_link)
         sleep(tts_accueil)
 
     def page_accueil_dpt(self):  
         backto_centre_btn_xpath = '//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[4]/button'
         for i in range(0,len(list_dep_xpath)):                                          # Ici on entre dans un département
             tmp_l_centre_dispo=[]
+            try : 
+                self.driver.find_element(By.XPATH, list_dep_xpath[i])
+            except NoSuchElementException:
+                return -2
             dep_btn = self.driver.find_element(By.XPATH, list_dep_xpath[i])
             dep_btn.click()
             sleep(tts_pageload)#pageload
@@ -45,6 +61,10 @@ class Bot():
                 text_center = keys_center[j]
                 print("____________________________________________")
                 print("Le centre  "+text_center+" est disponible" )
+                try:
+                    self.driver.find_element(By.XPATH,tmp_l_centre_dispo[j])
+                except NoSuchElementException:
+                    return -2
                 centre_btn = self.driver.find_element(By.XPATH,tmp_l_centre_dispo[j])
                 centre_btn.click()
                 sleep(tts_pageload)#pageload
@@ -84,7 +104,7 @@ class Bot():
                         l_horaire = self.list_horaire_dispo(mois_select,(j+1))
                         while(len(l_horaire)!=0):
                             l_horaire = self.get_into_horaire(l_horaire) #En paramètre : la liste des horaires , Renvoi une liste vide si le programme est rentré dans la page suivante
-                            if(len(l_horaire)==0):#Si le programme n'a pas rencontré un message de collision (1/2 -> cas horaire)
+                            if(len(l_horaire)==0):#Si le programme n'a pas rencontré un message de collision (cas selection horaire)
                                 self.confirm_step()
                                 result = self.captcha_bypass(False)
                                 i=0
@@ -110,7 +130,7 @@ class Bot():
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[2]/div/div[1]/div').click()
         #Bouton Confirm qui mène à l'anti-robot
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/button/span').click()
-        sleep(tts_pageload)#FREEZE
+        sleep(tts_notpageload*2)#FREEZE
 
     def get_into_horaire(self,l_horaire):
         for i in range(len(l_horaire)-1,-1,-1):
@@ -130,22 +150,20 @@ class Bot():
                     if(error_msg.is_displayed()):#Si il y a message d'erreur
                         del l_horaire[i]
                         retour=l_horaire
-                        print("     Message d'erreur collision")
                     else:
-                        print("     Pas de message d'erreur collision")
                         retour =[]
                     return retour
         return print('fail get_into_horaire')
 
     def list_horaire_dispo(self,mois_string,num_div_date):
         l_horaire = []
-        print("_____________________________________________________")
-        print("         Date à la position "+str(num_div_date))
+        #print("_____________________________________________________")
+        #print("         Date à la position "+str(num_div_date))
         for i in range(17):# car 16 horaires possibles pour une journée, 16+1 pour entrer dans l'except qui ira break
             try:
                 self.driver.find_element(By.XPATH,'//*[@id="tab-'+ mois_string +'"]/div/div/div/div['+ str(num_div_date) +']/div[2]/div/button['+str(i+1)+']')
             except Exception:
-                print("         "+str(i)+" horaires disponibles")
+                #print("         "+str(i)+" horaires disponibles")
                 break
             else:
                 l_horaire.append(self.driver.find_element(By.XPATH,'//*[@id="tab-'+ mois_string +'"]/div/div/div/div['+ str(num_div_date) +']/div[2]/div/button['+str(i+1)+']'))
@@ -192,7 +210,6 @@ class Bot():
         return l_centre_dispo
 
     def print_departement(self,compteur):#Fonction pour faciliter le débogage
-
         value_dep = list_keys_dep[compteur]
         print("____________________________________________")
         print("DEPARTEMENT : "+ str(value_dep))
@@ -201,7 +218,7 @@ class Bot():
             value = -1
             if(retry):
                 self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/button').click()
-                sleep(tts_notpageload*4)#not pageload
+                sleep(tts_notpageload*2)#not pageload
             if(self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div').is_displayed() == False):#SI SOUS MENU CAPTCHA NE S'AFFICHE PAS -> FREEZE JE NE SUIS PAS UN ROBOT
                 #Retour à la page selection horaire
                 self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[2]/button[1]').click() 
@@ -214,7 +231,7 @@ class Bot():
             #Cas d'erreur pour l'étiquette
             if(txt_img==''):
                 txt_img = "L'étiquette"
-            print("     "+txt_img)
+            #print("     "+txt_img)
             merged_path ='Tmp_Image/merged_obj.png'
             merged_clean_path = 'Tmp_Image/merged_clean.png'
             aim_clean_path = "captcha_clean/"+CAPTCHA_IMAGES[txt_img]+".png"
@@ -234,9 +251,9 @@ class Bot():
             sol_number = self.compare_image(aim_clean_path)
             #Clique sur la case réponse, puis sur le bouton confirmer
             self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div/div[4]/div[4]/button['+str(sol_number)+']').click()
-            sleep(tts_pageload)#not pageload
+            sleep(tts_notpageload*2)#not pageload
             self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[2]/button[2]').click()
-            sleep(tts_pageload)#pageload
+            sleep(tts_notpageload*2)#pageload
             try:
                 self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div')
             except Exception:
@@ -245,12 +262,12 @@ class Bot():
                 if(self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div').is_displayed()):
                     text = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div/div[1]').get_attribute('textContent')
                     if("Réponse invalide" in text):
-                        #Fermé la pop up
+                        #Fermer la pop up
                         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div/div[1]/button').click()
                         value = 0
                     elif(("Dépassement de la limite" in text) or ("Il n'y a pas de place pour ce créneau" in text)):
                         value=-1
-                        #Fermé la pop up
+                        #Fermer la pop up
                         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div/div[1]/button').click()
                         #Retour à la page selection horaire
                         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[2]/button[1]').click() 
@@ -334,7 +351,7 @@ class Bot():
             else:
                 list[0].append(orb_similarity)
                 list[1].append(i)                          
-            print("            For image "+str(i)+" similarity using ORB is: ", orb_similarity)
+            #print("            For image "+str(i)+" similarity using ORB is: ", orb_similarity)
         return list[1][0]
 
     def desc_object_process(self,url):
