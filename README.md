@@ -6,7 +6,7 @@ Je ne me porte pas responsable des conséquences de l'utilisation de ce script.
 
 ___________________________________________________
 
-<h2>Prérequis :</h2>
+<h1>Prérequis :</h1>
  
 <h3>Librairies :</h3>
  
@@ -39,4 +39,4 @@ ___________________________________________________
               place. L'ordre défini pour les départements doit être le même que pour dict_dep. La valeur pour chaque centre est son chemin XPATH sous Google Chrome. Ajoutez ou supprimez des lignes en fonction de vos préférences.
 ___________________________________________________
 
-<h2>Utilisation :</h2>
+<h1>Utilisation :</h1>
