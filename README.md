@@ -8,7 +8,7 @@ ___________________________________________________
 
 <h2>Prérequis :</h2>
  
-<h4>Librairies :</h4>
+<h3>Librairies :</h3>
  
    _pip install selenium
  
@@ -18,7 +18,7 @@ ___________________________________________________
   
   _Télécharger chromedriver : https://chromedriver.chromium.org/
   
- <h4>Configuration</h4>
+ <h3>Configuration</h3>
     
    <h5>bot.py :</h5>
     
