@@ -43,6 +43,6 @@ ___________________________________________________
 <h1>Utilisation :</h1>
 <h3>Sur le terminal :</h3>
 
-python -i .\candilib_bot.py
->>>Bot()
+    python -i .\candilib_bot.py
+    Bot()
 
