@@ -17,10 +17,9 @@ l_month = l_month[month-1:month+3] #liste des xpath de tous les mois réservable
 div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div[3]/div', 94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div[4]/div'}
 
 log_link = ''
-dict_dep = {77:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[5]/div',
+dict_dep = { 77:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[5]/div',
              78:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[6]/div', 
              91:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[7]/div', 
-             92:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[8]/div', 
              93:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[9]/div', 
              94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[10]/div'}
 list_keys_dep =list(dict_dep.keys())
@@ -28,22 +27,14 @@ list_keys_dep =list(dict_dep.keys())
 # CI DESSOUS, GARDER LES DEPARTEMENTS DANS LE MEME ORDRE DEFINI PAR LA VARIABLE dict_dep
 
 matrix_dep_centre=[ #77
-                    {'AVON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div/div',
-                     'MELUN':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
+                    {'MELUN':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
                      },
                      #78
                      {'VELIZY VILLACOUBLAY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[7]/div/div'
                      },
                      #91
-                     {'EVRY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div/div',
-                      'MASSY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[4]/div/div',
-                      'MONTGERON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[5]/div/div',
+                     {'MONTGERON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[5]/div/div',
                       'VILLABE':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
-                     },
-                     #92
-                     {'ANTONY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div/div',
-                      'CLAMART':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div/div',
-                      'GENNEVILLIERS':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[4]/div/div',
                      },
                      #93
                      {'NOISY LE GRAND':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div/div',
