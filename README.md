@@ -1,7 +1,7 @@
 # Candilib_Robot
 Script automatique permettant de réserver une place sur la plateforme du permis de conduire candilib
 
-Je n'encourage pas l'utilistation de robots sur la plateforme candilib, ce script est avant tout à but instructif.
+Je n'encourage pas l'utilistation de robots sur la plateforme officiel de candilib, ce script est avant tout à but instructif.
 Je ne me porte pas responsable des conséquences de l'utilisation de ce script.
 
 ___________________________________________________
