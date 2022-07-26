@@ -8,7 +8,7 @@ ___________________________________________________
 
 <h2>Prérequis :</h2>
  
-<h3>Librairies :</h3>
+<h4>Librairies :</h4>
  
    _pip install selenium
  
@@ -18,15 +18,15 @@ ___________________________________________________
   
   _Télécharger chromedriver : https://chromedriver.chromium.org/
   
- <h2>Configuration</h2>
+ <h4>Configuration</h4>
     
-   <h4>bot.py :</h4>
+   <h5>bot.py :</h5>
     
    Ligne 14 : Entrer le chemin absolue du fichier .exe pytesseract.
     
    Ligne 20   Entrer chemin absolue du fichier .exe chromedriver.
     
-   <h4>config.py</h4>
+   <h5>config.py</h5>
     
    Ligne 4,5,6 : Correspond à la valeur transmise à la fonction sleep(), il s'agit du temps de pause en seconde entre chaque actions sur l'application nécessitant un chargement de la page.
     
