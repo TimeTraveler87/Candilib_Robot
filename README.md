@@ -20,13 +20,13 @@ ___________________________________________________
   
  <h1>Configuration</h1>
     
-   <h4>bot.py :</h4>
+   <h3>bot.py :</h3>
     
    Ligne 14 : Entrer le chemin absolue du fichier .exe pytesseract.
     
    Ligne 20   Entrer chemin absolue du fichier .exe chromedriver.
     
-   <h4>config.py :</h4>
+   <h3>config.py :</h3>
     
    Ligne 4,5,6 : Correspond à la valeur transmise à la fonction sleep(), il s'agit du temps de pause en seconde entre chaque actions sur l'application nécessitant un chargement de la page.
     
