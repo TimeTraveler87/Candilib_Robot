@@ -7,7 +7,7 @@ Je ne me porte pas responsable des conséquences de l'utilisation de ce script.
 ___________________________________________________
 
 <h1>Prérequis :</h1>
- _Python
+ _Python3
  
 <h3>Librairies :</h3>
  
