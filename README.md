@@ -7,6 +7,7 @@ Je ne me porte pas responsable des conséquences de l'utilisation de ce script.
 ___________________________________________________
 
 <h1>Prérequis :</h1>
+ _Python
  
 <h3>Librairies :</h3>
  
@@ -40,4 +41,8 @@ ___________________________________________________
 ___________________________________________________
 
 <h1>Utilisation :</h1>
+<h3>Sur le terminal :</h3>
+
+python -i .\candilib_bot.py
+>>>Bot()
 
