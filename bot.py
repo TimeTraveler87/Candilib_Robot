@@ -25,7 +25,7 @@ class Bot():
             print("_____________________NOUVEAU TOUR_______________________")
             if(i>0 and value != -2):
                 print('')
-                sleep(randint(120,240))
+                sleep(randint(300,600))
             elif(value == -2):
                 self.login()
             value = self.main()
