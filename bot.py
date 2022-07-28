@@ -8,24 +8,22 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import urllib.request
 from config import log_link,list_keys_dep, matrix_dep_centre, l_month,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
-from time import sleep, time
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-pytesseract.tesseract_cmd = r''#Entrer chemin absolue du fichier .exe pytesseract
+from time import sleep
+pytesseract.tesseract_cmd = r''#Entrez le chemin de pytesseract.exe
 from selenium.common.exceptions import NoSuchElementException
-#Règle générale : return 1 = succès, return 0 = Réponse captcha (faux) , return -1 = collision avec autre candidat, return False = aucune place trouvé , return -2 =Error NoSuchElementException
+#Règle générale : return 1 = succès, return 0 = Réponse captcha (faux) , return -1 = collision avec autre candidat, return -3 = aucune place trouvé , return -2 =Error NoSuchElementException
                             
 class Bot():
     def __init__(self):
-        self.driver = webdriver.Chrome(executable_path='')#Entrer chemin absolue du fichier .exe chromedriver
+        self.driver = webdriver.Chrome(executable_path='')'#Entrez le chemin de chromedriver.exe
         sleep(tts_pageload)
-        value = False
+        value = -3
         i=0
-        while(value == False or value == -2):
+        while(value == -3 or value == -2):
             print("_____________________NOUVEAU TOUR_______________________")
             if(i>0 and value != -2):
                 print('')
-                sleep(randint(300,600))
+                sleep(randint(120,130))
             elif(value == -2):
                 self.login()
             value = self.main()
@@ -41,6 +39,7 @@ class Bot():
         
     def login(self):
         self.driver.get(log_link)
+        #self.driver.get(test_link)
         sleep(tts_accueil)
 
     def page_accueil_dpt(self):  
@@ -71,17 +70,17 @@ class Bot():
                 value = self.page_selection_date() # Renvoi -1 si collision dans ce cas on se trouve dans l'interface de selection de mois et d'horaire du centre en question
                 if(value==1):# On arrete le code avec return si une place est réservé
                     return True
-                if(j+1<len(tmp_l_centre_dispo)):# ACTION DE RETOUR SI IL NE S'AGIT PAS DU DERNIER CENTRE, SINON ACCUEIL
+                elif(j+1<len(tmp_l_centre_dispo)):# ACTION DE RETOUR SI IL NE S'AGIT PAS DU DERNIER CENTRE, SINON ACCUEIL
                     back_btn = self.driver.find_element(By.XPATH,backto_centre_btn_xpath)
                     back_btn.click()
                     sleep(tts_pageload)#pageload
             #POUR SELECTION DEPARTEMENT UNIQUEMENT --> Besoin de recharger la page plutôt que de faire un retour sinon le chemin xpath change
             self.login()
-        return False
+        return -3
 
     def page_selection_date(self):
         l_horaire=['initialisation']
-        result = False
+        result = -3
         for i in range(0,len(l_month)):# check si dates dispo pour le mois en question
             mois_select = self.mois_select_to_string(i)
             print("____________________________________________")
