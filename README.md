@@ -16,9 +16,9 @@ ___________________________________________________
  
    _pip install opencv-python
  
-   _pip install pytesseract ( Sous Windows, besoin de telecharger son installer : https://github.com/UB-Mannheim/tesseract/wiki)
+   _pip install pytesseract, Sous Windows, besoin de telecharger son installer : https://github.com/UB-Mannheim/tesseract/wiki et de préciser le path du .exe (voir Configuration)
   
-  _Télécharger chromedriver : https://chromedriver.chromium.org/
+  _Télécharger chromedriver : https://chromedriver.chromium.org/ et préciser le path du .exe (voir Configuration)
   
  <h1>Configuration</h1>
     
