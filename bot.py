@@ -81,6 +81,7 @@ class Bot():
 
     def page_selection_date(self):
         l_horaire=['initialisation']
+        result = False
         for i in range(0,len(l_month)):# check si dates dispo pour le mois en question
             mois_select = self.mois_select_to_string(i)
             print("____________________________________________")
