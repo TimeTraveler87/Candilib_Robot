@@ -8,7 +8,7 @@ ___________________________________________________
 
 <h1>Prérequis :</h1>
  _Python3
- 
+ _Google chrome
 <h3>Librairies :</h3>
  
    _pip install selenium
