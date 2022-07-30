@@ -1,10 +1,9 @@
 from datetime import date
 from time import sleep
 #tts_ : temps de pause entre chaque actions sur l'application nécessitant un chargement de la page
-tts_accueil = 3
-tts_pageload = 1.5
-tts_notpageload = 0.5
-
+tts_accueil = 2 #Limite testé 1.2 
+tts_pageload = 1 #Limite testé 0.5
+tts_notpageload = 0.5 #Limite testé 0.2
 dict_month = {1:'//*[@id="tab-janvier"]/div/div/div/div/div', 2:'//*[@id="tab-février"]/div/div/div/div/div'
 , 3:'//*[@id="tab-mars"]/div/div/div/div/div', 4:'//*[@id="tab-avril"]/div/div/div/div/div', 5:'//*[@id="tab-mai"]/div/div/div/div/div'
 ,  6:'//*[@id="tab-juin"]/div/div/div/div/div', 7:'//*[@id="tab-juillet"]/div/div/div/div/div', 8:'//*[@id="tab-août"]/div/div/div/div/div'
@@ -14,27 +13,33 @@ l_month = list(dict_month.values())
 l_month_keys = list(dict_month.keys())
 month = int(date.today().month) #mois actuel du système
 l_month = l_month[month-1:month+3] #liste des xpath de tous les mois réservables
-div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div[3]/div', 94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div[4]/div'}
 
-log_link = ''
-dict_dep = { 77:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[5]/div',
+# SITE OFFICIEL
+log_link = 'https://beta.interieur.gouv.fr/candilib/candidat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjhkODdiMTE2NTk4MDAyOGEwZjUxZCIsImxldmVsIjowLCJjYW5kaWRhdFN0YXR1cyI6IjQiLCJub21OYWlzc2FuY2UiOiJGRVJSQVQiLCJjb2RlTmVwaCI6IjE4MDM3NzIwMTg2NiIsImhvbWVEZXBhcnRlbWVudCI6Ijc3IiwiZGVwYXJ0ZW1lbnQiOiI3NyIsImVtYWlsIjoiYWZlcnJhdDAxM0BnbWFpbC5jb20iLCJwb3J0YWJsZSI6IjA2Mzc2NjE5MTQiLCJwcmVub20iOiJBZ2hpbGVzIiwiZmlyc3RDb25uZWN0aW9uIjp0cnVlLCJkYXRlRVRHIjoiMjAyNy0wMy0wNCIsImlzSW5SZWNlbnRseURlcHQiOmZhbHNlLCJpYXQiOjE2NTkwMDc5NDIsImV4cCI6MTY1OTA1Mjc5OH0.SBWIZUYkQqatRTGaj3h8fP2E5YWFNzaUVGIinUVRV5M'
+dict_dep = {77:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[5]/div',
              78:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[6]/div', 
              91:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[7]/div', 
+             92:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[8]/div', 
              93:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[9]/div', 
              94:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[10]/div'}
 list_keys_dep =list(dict_dep.keys())
-
-# CI DESSOUS, GARDER LES DEPARTEMENTS DANS LE MEME ORDRE DEFINI PAR LA VARIABLE dict_dep
-
 matrix_dep_centre=[ #77
-                    {'MELUN':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
+                    {'AVON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div/div',
+                     'MELUN':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
                      },
                      #78
                      {'VELIZY VILLACOUBLAY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[7]/div/div'
                      },
                      #91
-                     {'MONTGERON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[5]/div/div',
+                     {'EVRY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div/div',
+                      'MASSY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[4]/div/div',
+                      'MONTGERON':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[5]/div/div',
                       'VILLABE':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[6]/div/div'
+                     },
+                     #92
+                     {'ANTONY':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div/div',
+                      'CLAMART':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div/div',
+                      'GENNEVILLIERS':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[4]/div/div',
                      },
                      #93
                      {'NOISY LE GRAND':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[3]/div/div',
@@ -45,8 +50,7 @@ matrix_dep_centre=[ #77
                      'MAISONS ALFORT':'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[4]/div/div'  
                     }
                   ]
-list_dep_xpath = list(dict_dep.values())
-
+list_dep_xpath = list(dict_dep.values())#dict_dep
 CAPTCHA_IMAGES = {
     "L'avion": "airplane",
     "Les ballons": "balloons",
@@ -68,6 +72,7 @@ CAPTCHA_IMAGES = {
     "Le graphique": "graph",
     "La maison": "house",
     "La clef": "key",
+    "Laclef":"key",
     "La feuille": "leaf",
     "L'ampoule": "light-bulb",
     "Le cadenas": "lock",
