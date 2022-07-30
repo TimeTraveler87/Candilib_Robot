@@ -9,13 +9,15 @@ from selenium.webdriver.common.by import By
 import urllib.request
 from config import log_link,list_keys_dep, matrix_dep_centre, l_month,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
 from time import sleep
-pytesseract.tesseract_cmd = r''#Entrez le chemin de pytesseract.exe
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+pytesseract.tesseract_cmd = r''#Chemin absolue de pytesseract.exe
 from selenium.common.exceptions import NoSuchElementException
 #Règle générale : return 1 = succès, return 0 = Réponse captcha (faux) , return -1 = collision avec autre candidat, return -3 = aucune place trouvé , return -2 =Error NoSuchElementException
                             
 class Bot():
     def __init__(self):
-        self.driver = webdriver.Chrome(executable_path='')'#Entrez le chemin de chromedriver.exe
+        self.driver = webdriver.Chrome(executable_path='')#Chemin absolue de chromedriver.exe
         sleep(tts_pageload)
         value = -3
         i=0
@@ -39,13 +41,12 @@ class Bot():
         
     def login(self):
         self.driver.get(log_link)
-        #self.driver.get(test_link)
         sleep(tts_accueil)
 
     def page_accueil_dpt(self):  
         backto_centre_btn_xpath = '//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[4]/button'
         for i in range(0,len(list_dep_xpath)):                                          # Ici on entre dans un département
-            tmp_l_centre_dispo=[]
+            dict_centre_dispo=[]
             try : 
                 self.driver.find_element(By.XPATH, list_dep_xpath[i])
             except NoSuchElementException:
@@ -54,23 +55,24 @@ class Bot():
             dep_btn.click()
             sleep(tts_pageload)#pageload
             self.print_departement(i)
-            tmp_l_centre_dispo = self.list_centre_dispo(list(matrix_dep_centre[i].values()))
-            for j in range(0,len(tmp_l_centre_dispo)):                                  # Ici on entre dans un centre du département de la boucle ci-dessus
-                keys_center = list(matrix_dep_centre[i].keys())
-                text_center = keys_center[j]
+            
+            dict_centre_dispo = self.list_centre_dispo(matrix_dep_centre[i])
+            value_centre_dispo = list(dict_centre_dispo.values())
+            keys_centre_dispo = list(dict_centre_dispo.keys())
+            for j in range(0,len(dict_centre_dispo)):                                  # Ici on entre dans un centre du département de la boucle ci-dessus
                 print("____________________________________________")
-                print("Le centre  "+text_center+" est disponible" )
+                print("Le centre  "+ keys_centre_dispo[j] +" est disponible" )
                 try:
-                    self.driver.find_element(By.XPATH,tmp_l_centre_dispo[j])
+                    self.driver.find_element(By.XPATH,value_centre_dispo[j])
                 except NoSuchElementException:
                     return -2
-                centre_btn = self.driver.find_element(By.XPATH,tmp_l_centre_dispo[j])
+                centre_btn = self.driver.find_element(By.XPATH,value_centre_dispo[j])
                 centre_btn.click()
                 sleep(tts_pageload)#pageload
                 value = self.page_selection_date() # Renvoi -1 si collision dans ce cas on se trouve dans l'interface de selection de mois et d'horaire du centre en question
                 if(value==1):# On arrete le code avec return si une place est réservé
                     return True
-                elif(j+1<len(tmp_l_centre_dispo)):# ACTION DE RETOUR SI IL NE S'AGIT PAS DU DERNIER CENTRE, SINON ACCUEIL
+                elif(j+1<len(dict_centre_dispo)):# ACTION DE RETOUR SI IL NE S'AGIT PAS DU DERNIER CENTRE, SINON ACCUEIL
                     back_btn = self.driver.find_element(By.XPATH,backto_centre_btn_xpath)
                     back_btn.click()
                     sleep(tts_pageload)#pageload
@@ -91,7 +93,7 @@ class Bot():
                 print("     Pas de dates pour le mois de "+mois_select)
             else:
                 for j in range(0,10):
-                    try:#On cherche la date suivante à commencer par la première
+                    try:#On cherche la date suivante à commencer par la dernière 
                         self.driver.find_element(By.XPATH,'//*[@id="tab-'+mois_select+'"]/div/div/div/div['+str(j+1)+']/div')
                     except Exception:
                         print("Limite à "+str(j)+ " date(s)")
@@ -100,18 +102,21 @@ class Bot():
                         #On rentre dans le sous-menu de cette date pour accéder à ses horaires  
                         btn_date = self.driver.find_element(By.XPATH,'//*[@id="tab-'+mois_select+'"]/div/div/div/div['+str(j+1)+']/div')
                         btn_date.click()
-                        sleep(tts_notpageload)#not pageload
                         l_horaire = self.list_horaire_dispo(mois_select,(j+1))
                         while(len(l_horaire)!=0):
+                            i=0
                             l_horaire = self.get_into_horaire(l_horaire) #En paramètre : la liste des horaires , Renvoi une liste vide si le programme est rentré dans la page suivante
                             if(len(l_horaire)==0):#Si le programme n'a pas rencontré un message de collision (cas selection horaire)
+                                sleep(tts_pageload)#pageload                   
                                 self.confirm_step()
                                 result = self.captcha_bypass(False)
-                                i=0
-                                while(result==0 and i<=10):
+                                while(result==0 and i<3):#3 essaies pour le captcha
                                     result = self.captcha_bypass(True)
                                     i=i+1
-                                return result
+                                if(result==-1):
+                                    sleep(tts_notpageload)
+                                    l_horaire = self.list_horaire_dispo(mois_select,(j+1))
+                        return result
             finally: # A SAVOIR Finally s'execute dans tous les cas, malgré les return plus haut # A PARTIR D'ICI : on passe au mois suivant sachant qu'il y en a 4 à tester dans tous les cas
                 if(i<3 and (len(l_horaire)!=0) and result!=1):
                     try:
@@ -120,40 +125,38 @@ class Bot():
                         print("Erreur fonction interfaces_post_centre dans le finally -> Incohérence avec la condition if(i<3) : Problème récurrent lorsque le chargement de la page n'a pas le temps de se faire (Il faut augmenter le temps de time_to_sleep)")
                     else:
                         btn_mois_suivant = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[3]/div[2]/div/div[2]/div/a['+str(i+2)+']')
+                        sleep(tts_notpageload)
                         btn_mois_suivant.click()
         return  0
 
     def confirm_step(self):
         #checkbox 1
+        sleep(tts_notpageload)
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[1]/div/div[1]/div').click()
         #checkbox 2
+        sleep(0.1)
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[2]/div/div[1]/div').click()
-        #Bouton Confirm qui mène à l'anti-robot
+        sleep(0.1)
+        #Bouton confirm "JE NE SUIS PAS UN ROBOT" qui mène à l'anti-robot
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/button/span').click()
-        sleep(tts_notpageload*2)#FREEZE
+        sleep(tts_accueil)#chargement long du captcha
 
     def get_into_horaire(self,l_horaire):
+        sleep(tts_notpageload)#not pageload
         for i in range(len(l_horaire)-1,-1,-1):
             try:
                 l_horaire[i].click()
             except Exception:
-                print('Erreur try fonction : get_into_horaire')
-            else:
+                print('Erreur try l_horaire.click()')
+            finally:
                 sleep(tts_pageload)#pageload
-                try:
-                    self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div')
-                except:
-                    print('')
+                error_msg = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div')                     
+                if(error_msg.is_displayed()):#Si il y a message d'erreur
+                    close_error = self.driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div[2]/div/div[1]/button')
+                    close_error.click()
                 else:
-                    error_msg = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div')  
-                                        
-                    if(error_msg.is_displayed()):#Si il y a message d'erreur
-                        del l_horaire[i]
-                        retour=l_horaire
-                    else:
-                        retour =[]
-                    return retour
-        return print('fail get_into_horaire')
+                    return []   
+        return print('fail boucle get_into_horaire')
 
     def list_horaire_dispo(self,mois_string,num_div_date):
         l_horaire = []
@@ -163,7 +166,7 @@ class Bot():
             try:
                 self.driver.find_element(By.XPATH,'//*[@id="tab-'+ mois_string +'"]/div/div/div/div['+ str(num_div_date) +']/div[2]/div/button['+str(i+1)+']')
             except Exception:
-                #print("         "+str(i)+" horaires disponibles")
+                print("         "+str(i)+" horaires disponibles")
                 break
             else:
                 l_horaire.append(self.driver.find_element(By.XPATH,'//*[@id="tab-'+ mois_string +'"]/div/div/div/div['+ str(num_div_date) +']/div[2]/div/button['+str(i+1)+']'))
@@ -198,16 +201,18 @@ class Bot():
             mois_string='décembre'
         return mois_string
 
-    def list_centre_dispo(self,liste_centre):
+    def list_centre_dispo(self,dict_centre):
     # On ajoute les centres qui proposent une place à une liste l_centre_dispo que l'on retourne
-        l_centre_dispo = []
-        for i in range(0,len(liste_centre)):
-            tmp_xpath = liste_centre[i]+'/span'
+        new_dict_centre = {}
+        keys_centre = list(dict_centre.keys())
+        value_centre = list(dict_centre.values())
+        for i in range(0,len(value_centre)):
+            tmp_xpath = value_centre[i]+'/span'
             try:
                 self.driver.find_element(By.XPATH,tmp_xpath)
-            except Exception:
-                l_centre_dispo.append(liste_centre[i])
-        return l_centre_dispo
+            except Exception:#Cas : centre est disponible
+                new_dict_centre.update({keys_centre[i]:value_centre[i]})
+        return new_dict_centre
 
     def print_departement(self,compteur):#Fonction pour faciliter le débogage
         value_dep = list_keys_dep[compteur]
@@ -218,10 +223,11 @@ class Bot():
             value = -1
             if(retry):
                 self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/button').click()
-                sleep(tts_notpageload*2)#not pageload
+                sleep(tts_accueil)# CAPCTCHA chargement
             if(self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div').is_displayed() == False):#SI SOUS MENU CAPTCHA NE S'AFFICHE PAS -> FREEZE JE NE SUIS PAS UN ROBOT
                 #Retour à la page selection horaire
-                self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[2]/button[1]').click() 
+                self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[2]/button[1]').click()
+                sleep(tts_pageload)
                 return value
             #Texte de la description objet captcha
             url_txt = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div/div[4]/div[1]/img').get_attribute('src')
@@ -251,9 +257,9 @@ class Bot():
             sol_number = self.compare_image(aim_clean_path)
             #Clique sur la case réponse, puis sur le bouton confirmer
             self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div/div[4]/div[4]/button['+str(sol_number)+']').click()
-            sleep(tts_notpageload*2)#not pageload
+            sleep(tts_pageload)#not pageload
             self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[2]/button[2]').click()
-            sleep(tts_notpageload*2)#pageload
+            sleep(tts_pageload)#notpageload
             try:
                 self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/div[2]/div')
             except Exception:
