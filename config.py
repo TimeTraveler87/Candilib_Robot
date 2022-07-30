@@ -14,8 +14,7 @@ l_month_keys = list(dict_month.keys())
 month = int(date.today().month) #mois actuel du système
 l_month = l_month[month-1:month+3] #liste des xpath de tous les mois réservables
 
-# SITE OFFICIEL
-log_link = 'https://beta.interieur.gouv.fr/candilib/candidat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjhkODdiMTE2NTk4MDAyOGEwZjUxZCIsImxldmVsIjowLCJjYW5kaWRhdFN0YXR1cyI6IjQiLCJub21OYWlzc2FuY2UiOiJGRVJSQVQiLCJjb2RlTmVwaCI6IjE4MDM3NzIwMTg2NiIsImhvbWVEZXBhcnRlbWVudCI6Ijc3IiwiZGVwYXJ0ZW1lbnQiOiI3NyIsImVtYWlsIjoiYWZlcnJhdDAxM0BnbWFpbC5jb20iLCJwb3J0YWJsZSI6IjA2Mzc2NjE5MTQiLCJwcmVub20iOiJBZ2hpbGVzIiwiZmlyc3RDb25uZWN0aW9uIjp0cnVlLCJkYXRlRVRHIjoiMjAyNy0wMy0wNCIsImlzSW5SZWNlbnRseURlcHQiOmZhbHNlLCJpYXQiOjE2NTkwMDc5NDIsImV4cCI6MTY1OTA1Mjc5OH0.SBWIZUYkQqatRTGaj3h8fP2E5YWFNzaUVGIinUVRV5M'
+log_link = ''#Entrez le lien candilib
 dict_dep = {77:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[5]/div',
              78:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[6]/div', 
              91:'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div[2]/div[7]/div', 
