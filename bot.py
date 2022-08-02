@@ -60,12 +60,12 @@ class Bot():
             value_centre_dispo = list(dict_centre_dispo.values())
             keys_centre_dispo = list(dict_centre_dispo.keys())
             for j in range(0,len(dict_centre_dispo)):                                  # Ici on entre dans un centre du département de la boucle ci-dessus
-                print("____________________________________________")
-                print("Le centre  "+ keys_centre_dispo[j] +" est disponible" )
                 try:
                     self.driver.find_element(By.XPATH,value_centre_dispo[j])
                 except NoSuchElementException:
                     return -2
+                print("____________________________________________")
+                print("Le centre  "+ keys_centre_dispo[j] +" est disponible" )
                 centre_btn = self.driver.find_element(By.XPATH,value_centre_dispo[j])
                 centre_btn.click()
                 sleep(tts_pageload)#pageload
@@ -79,7 +79,7 @@ class Bot():
             #POUR SELECTION DEPARTEMENT UNIQUEMENT --> Besoin de recharger la page plutôt que de faire un retour sinon le chemin xpath change
             self.login()
         return -3
-
+      
     def page_selection_date(self):
         l_horaire=['initialisation']
         result = -3
