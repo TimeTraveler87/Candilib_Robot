@@ -1,6 +1,6 @@
 import base64
 from random import randint
-import winsound
+import winsound,os
 import cv2
 import io
 from pytesseract import pytesseract
@@ -247,6 +247,7 @@ class Bot():
             bytes = self.get_file_content_chrome(url_obj)
             if(bytes == -2):
               winsound.Beep(650,1500)
+              #os.system('play -nq -t alsa synth {} sine {}'.format(650, 1500))
               sleep(60*3)
               return value
             imageStream = io.BytesIO(bytes)
