@@ -1,5 +1,6 @@
 import base64
 from random import randint
+import winsound
 import cv2
 import io
 from pytesseract import pytesseract
@@ -244,6 +245,10 @@ class Bot():
             #Image des objets captcha
             url_obj = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div/div[4]/div[3]/img').get_attribute('src')
             bytes = self.get_file_content_chrome(url_obj)
+            if(bytes == -2):
+              winsound.Beep(650,1500)
+              sleep(60*3)
+              return value
             imageStream = io.BytesIO(bytes)
             img_merged = Image.open(imageStream)
             img_merged.save(merged_path)
@@ -386,5 +391,5 @@ class Bot():
             xhr.send();
             """, uri)
         if type(result) == int :
-            raise Exception("Request failed with status %s" % result)
+            return -2
         return base64.b64decode(result)
