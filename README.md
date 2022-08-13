@@ -11,15 +11,24 @@ ___________________________________________________
  
  _Google chrome
 <h3>Librairies :</h3>
-Sous Debian/Ubuntu/Linux Mint :    sudo apt install sox
-Sous Mac :    sudo port install sox
-    sudo apt install sox 
+
+
     pip install selenium
     pip install opencv-python
     pip install pytesseract
-Sous Windows -> besoin de telecharger son installer : https://github.com/UB-Mannheim/tesseract/wiki et de préciser le path du .exe (voir Configuration)
+Sous Windows : 
+ 
+ Besoin de telecharger l'installer pour pytesseract : https://github.com/UB-Mannheim/tesseract/wiki et de préciser le path du fichier .exe (voir Configuration)
   
   _Télécharger chromedriver : https://chromedriver.chromium.org/ et préciser le path du .exe (voir Configuration)
+  
+Sous Debian/Ubuntu/Linux Mint :    
+
+    sudo apt install sox
+
+Sous Mac :    
+
+    sudo port install sox
   
  <h1>Configuration</h1>
     
