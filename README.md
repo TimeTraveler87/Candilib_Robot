@@ -12,7 +12,6 @@ ___________________________________________________
  _Google chrome
 <h3>Librairies :</h3>
 
-
     pip install selenium
     pip install opencv-python
     pip install pytesseract
