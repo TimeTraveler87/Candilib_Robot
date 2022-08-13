@@ -51,4 +51,4 @@ ___________________________________________________
 Vous pouvez laisser tourner le programme en fond et faire autre chose sur votre machine.
 
 <h3>/!\IMPORTANT/!\</h3>
-Le programme peut en théorie résoudre le captcha nécessaire à la réservation d'une place, cependant s'il échoue vous serez avertit par un bip sonore qui vous avertira que le programme a selectionné une date et un horaire, mais qu'il est incapable de résoudre le captcha. Dans ce cas ce sera a vous de résoudre manuellement le captcha pour confirmer votre place.
+Le programme peut en théorie résoudre le captcha nécessaire à la réservation d'une place, cependant s'il échoue vous serez avertit par un bip sonore qui vous avertira que le programme a selectionné une date et un horaire, mais qu'il est incapable de résoudre le captcha. Dans ce cas, ce sera a vous de résoudre manuellement le captcha pour confirmer votre place.
