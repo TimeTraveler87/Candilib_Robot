@@ -38,6 +38,11 @@ ___________________________________________________
    Ligne 20 : Entrer chemin absolue du fichier .exe chromedriver.
    
    Ligne 28 : Après chaque tour infructueux, le programme s'interrompt pendant X à Y secondes
+   
+   <h5>Sous Mac/Linux/Ubuntu/Linux Mint :</h5>
+   
+   Ligne 250 : Intégrer l'instruction en enlevant le signe "#" à la ligne 
+   Ligne 249 : Effacer la ligne d'instruction
     
    <h3>config.py :</h3>
     
