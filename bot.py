@@ -18,7 +18,7 @@ from selenium.common.exceptions import NoSuchElementException
                             
 class Bot():
     def __init__(self):
-        self.driver = webdriver.Chrome(executable_path='')#Chemin absolue de chromedriver.exe
+        self.driver = webdriver.Chrome(executable_path=r'')#Chemin absolue de chromedriver.exe
         sleep(tts_pageload)
         value = -3
         i=0
