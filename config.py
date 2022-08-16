@@ -55,6 +55,7 @@ CAPTCHA_IMAGES = {
     "La Voiture": "car",
     "Le chat": "cat",
     "La chaise": "chair",
+    "Lachaise": "chair",
     "Le trombone": "clip",
     "L'horloge": "clock",
     "Le nuage": "cloud",
