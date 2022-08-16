@@ -3,7 +3,7 @@ from time import sleep
 #tts_ : temps de pause entre chaque actions sur l'application nécessitant un chargement de la page
 tts_accueil = 2 #Limite testé 1.2 
 tts_pageload = 1 #Limite testé 0.5
-tts_notpageload = 0.5 #Limite testé 0.2
+tts_notpageload = 0.35 #Limite testé 0.2
 dict_month = {1:'//*[@id="tab-janvier"]/div/div/div/div/div', 2:'//*[@id="tab-février"]/div/div/div/div/div'
 , 3:'//*[@id="tab-mars"]/div/div/div/div/div', 4:'//*[@id="tab-avril"]/div/div/div/div/div', 5:'//*[@id="tab-mai"]/div/div/div/div/div'
 ,  6:'//*[@id="tab-juin"]/div/div/div/div/div', 7:'//*[@id="tab-juillet"]/div/div/div/div/div', 8:'//*[@id="tab-août"]/div/div/div/div/div'
