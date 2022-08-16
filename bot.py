@@ -8,14 +8,17 @@ from PIL import Image,ImageChops
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import urllib.request
-from config import log_link,list_keys_dep, matrix_dep_centre, l_month,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
+from config import test_link,test_list_keys_dep,test_matrix_dep_centre,test_dict_dep,log_link,list_keys_dep, matrix_dep_centre, l_month,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
 from time import sleep
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 pytesseract.tesseract_cmd = r''#Chemin absolue de pytesseract.exe
 from selenium.common.exceptions import NoSuchElementException
 #Règle générale : return 1 = succès, return 0 = Réponse captcha (faux) , return -1 = collision avec autre candidat, return -3 = aucune place trouvé , return -2 =Error NoSuchElementException
-                            
+txt_path = 'Tmp_Image/txt.png'
+merged_path ='Tmp_Image/merged_obj.png'
+merged_clean_path = 'Tmp_Image/merged_clean.png'
+
 class Bot():
     def __init__(self):
         self.driver = webdriver.Chrome(executable_path=r'')#Chemin absolue de chromedriver.exe
@@ -135,9 +138,9 @@ class Bot():
         sleep(tts_notpageload)
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[1]/div/div[1]/div').click()
         #checkbox 2
-        sleep(0.1)
+        sleep(tts_notpageload)
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[2]/div/div[1]/div').click()
-        sleep(0.1)
+        sleep(tts_notpageload)
         #Bouton confirm "JE NE SUIS PAS UN ROBOT" qui mène à l'anti-robot
         self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/button/span').click()
         sleep(tts_accueil)#chargement long du captcha
@@ -239,23 +242,23 @@ class Bot():
             if(txt_img==''):
                 txt_img = "L'étiquette"
             #print("     "+txt_img)
-            merged_path ='Tmp_Image/merged_obj.png'
-            merged_clean_path = 'Tmp_Image/merged_clean.png'
             aim_clean_path = "captcha_clean/"+CAPTCHA_IMAGES[txt_img]+".png"
             #Image des objets captcha
             url_obj = self.driver.find_element(By.XPATH,'//*[@id="app"]/div[1]/main/div/div[2]/div/div[2]/div/div/div/div[2]/div/form/div[1]/div[3]/div/div/div/div[4]/div[3]/img').get_attribute('src')
-            bytes = self.get_file_content_chrome(url_obj)
-            if(bytes == -2):
-              winsound.Beep(650,1500)
-              #os.system('play -nq -t alsa synth {} sine {}'.format(650, 1500))
-              sleep(60*3)
-              return value
-            imageStream = io.BytesIO(bytes)
-            img_merged = Image.open(imageStream)
-            img_merged.save(merged_path)
+            re_shape = self.object_process(url_obj)
+            if(re_shape==-1):
+                bytes = self.get_file_content_chrome(url_obj)
+                if(bytes == -2):
+                    winsound.Beep(650,1500)
+                    #os.system('play -nq -t alsa synth {} sine {}'.format(650, 1500))
+                    sleep(60*3)
+                    return value
+                imageStream = io.BytesIO(bytes)
+                img_merged = Image.open(imageStream)
+                img_merged.save(merged_path)
             #Rend l'image en texte = noir fond = blanc
-            merged_clean = self.imagecolor_traitement('Tmp_Image/merged_obj.png')
-            merged_clean.save(merged_clean_path)
+                merged_clean = self.imagecolor_traitement(merged_path)
+                merged_clean.save(merged_clean_path)
             #Rend l'image ref en texte = noir fond = blanc
             img_aim = self.imagecolor_traitement("captcha_images/"+CAPTCHA_IMAGES[txt_img]+".png")
             img_aim.save(aim_clean_path)
@@ -366,11 +369,21 @@ class Bot():
             #print("            For image "+str(i)+" similarity using ORB is: ", orb_similarity)
         return list[1][0]
 
+    def object_process(self,url):
+        try:
+            urllib.request.urlretrieve(url, "obj.png")
+        except Exception:
+            return -1
+        else:
+            img = self.imagecolor_traitement("obj.png")
+            img.save(merged_clean_path)
+            return 0
+
     def desc_object_process(self,url):
         urllib.request.urlretrieve(url, "txt.png")
         img = self.imagecolor_traitement("txt.png")
-        img.save('Tmp_Image/txt.png')
-        txt = pytesseract.image_to_string('Tmp_Image/txt.png')
+        img.save(txt_path)
+        txt = pytesseract.image_to_string(txt_path)
         return txt
     
     def imagecolor_traitement(self,file_path):# renvoi l'imgae avec fond = blanc , texte = noir
