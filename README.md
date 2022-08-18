@@ -15,6 +15,7 @@ ___________________________________________________
     pip install selenium
     pip install opencv-python
     pip install pytesseract
+    
 <h4>Sous Windows :</h4>
  
  Besoin de telecharger l'installer pour pytesseract : https://github.com/UB-Mannheim/tesseract/wiki et de préciser le path du fichier .exe (voir Configuration)
@@ -22,8 +23,10 @@ ___________________________________________________
   _Télécharger chromedriver : https://chromedriver.chromium.org/ et préciser le path du .exe (voir Configuration)
   
 <h4>Sous Debian/Ubuntu/Linux Mint :</h4>
-
-    sudo apt install sox
+  
+   sudo apt install tesseract-ocr
+   sudo apt install libtesseract-dev
+   sudo apt install sox
 
 <h4>Sous Mac :</h4>
 
@@ -33,7 +36,7 @@ ___________________________________________________
     
    <h3>bot.py :</h3>
     
-   Ligne 15 : Entrer le chemin absolue du fichier .exe pytesseract.
+   Ligne 15 : Sous Windows, entrer le chemin absolue du fichier .exe pytesseract, sous autres OS, supprimer la ligne.
     
    Ligne 24 : Entrer chemin absolue du fichier .exe chromedriver.
    
