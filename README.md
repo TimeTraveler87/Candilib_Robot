@@ -37,24 +37,24 @@ ___________________________________________________
     
    Ligne 24 : Entrer chemin absolue du fichier .exe chromedriver.
    
-   Ligne 28 : Après chaque tour infructueux, le programme s'interrompt pendant X à Y secondes
+   Ligne 32 : Après chaque tour infructueux, le programme s'interrompt pendant X à Y secondes
    
    <h4>Sous Mac/Linux/Ubuntu/Linux Mint :</h4>
    
-   Ligne 250 : Intégrer l'instruction en enlevant le signe "#" à la ligne 
+   Ligne 253 : Intégrer l'instruction en enlevant le signe "#" à la ligne 
    
-   Ligne 249 : Effacer la ligne d'instruction
+   Ligne 252 : Effacer la ligne d'instruction
     
    <h3>config.py :</h3>
     
    Ligne 4,5,6 : Correspond à la valeur transmise à la fonction sleep(), il s'agit du temps de pause en seconde entre chaque actions sur l'application nécessitant un chargement de la page.
     
-   Ligne 19 : Coller le lien de connexion dans la variable log_link
+   Ligne 17 : Coller le lien de connexion dans la variable log_link
     
-   Ligne 20 : Dans la variable dict_dep sont référencés les departements qui seront traités pour la recherche de   
+   Ligne 18 : Dans la variable dict_dep sont référencés les departements qui seront traités pour la recherche de   
               place. La valeur pour chaque departement est son chemin XPATH sous Google Chrome. Ajouter ou supprimer des lignes en fonction de vos préférences. 
     
-   Ligne 29 :  Dans la variable matrix_dep_centre sont référencés les centres qui seront traités pour la recherche de   
+   Ligne 25 :  Dans la variable matrix_dep_centre sont référencés les centres qui seront traités pour la recherche de   
               place. L'ordre défini pour les départements doit être le même que pour dict_dep. La valeur pour chaque centre est son chemin XPATH sous Google Chrome. Ajoutez ou supprimez des lignes en fonction de vos préférences.
 ___________________________________________________
 
