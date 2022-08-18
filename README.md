@@ -24,9 +24,9 @@ ___________________________________________________
   
 <h4>Sous Debian/Ubuntu/Linux Mint :</h4>
   
-   sudo apt install tesseract-ocr
-   sudo apt install libtesseract-dev
-   sudo apt install sox
+    sudo apt install tesseract-ocr
+    sudo apt install libtesseract-dev
+    sudo apt install sox
 
 <h4>Sous Mac :</h4>
 
