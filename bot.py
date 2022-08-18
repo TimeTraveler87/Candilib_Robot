@@ -8,7 +8,7 @@ from PIL import Image,ImageChops
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import urllib.request
-from config import test_link,test_list_keys_dep,test_matrix_dep_centre,test_dict_dep,log_link,list_keys_dep, matrix_dep_centre, l_month,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
+from config import log_link,list_keys_dep, matrix_dep_centre, l_month,tts_pageload,tts_notpageload,tts_accueil, list_dep_xpath, month, CAPTCHA_IMAGES
 from time import sleep
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
